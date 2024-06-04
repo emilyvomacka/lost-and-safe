@@ -1,16 +1,28 @@
 #include <string>
 #include <ctime>
+#include <stdexcept>
 
-class Storage {
+constexpr int VERSION = 1; 
+
+class StorageItem {
   public:
-    std::string getText();
+    StorageItem(std::string& text); 
+
     int getVersion();
-    time_t getDateAdded();
-    int getTimesReferenced();
+
+    time_t getTimeLastSurfaced();
+
+    int getTimesReturned();
+
+    std::string getText();
+
+    void serialize(const std::string& filename); 
+
+    // StorageItem deserialize(std::string filename);
 
   private:
-    std::string text;
     int version;
-    time_t dateAdded;   
-    int timesReferenced;
+    time_t timeLastSurfaced;   
+    int timesReturned;
+    std::string text;
 };
