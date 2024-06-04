@@ -7,11 +7,11 @@
 
 using namespace std;
 
-StorageItem::StorageItem(string& text) {
+StorageItem::StorageItem(string textInput) {
+    text = textInput;
     version = VERSION;
     timesReturned = 0;
-    timeLastSurfaced = time(nullptr);
-    text = text;
+    timeLastSurfaced = time(nullptr);   
 }
 
 int StorageItem::getVersion() { return version; }
@@ -20,7 +20,9 @@ time_t StorageItem::getTimeLastSurfaced() { return timeLastSurfaced; }
 
 int StorageItem::getTimesReturned() { return timesReturned; }
 
-string StorageItem::getText() { return text; }
+string StorageItem::getText() { 
+    return text; 
+}
 
 void StorageItem::serialize(const string& filename) {
     ofstream file(filename, ios::in);

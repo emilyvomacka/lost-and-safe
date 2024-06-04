@@ -6,7 +6,7 @@ constexpr int VERSION = 1;
 
 class StorageItem {
   public:
-    StorageItem(std::string& text); 
+    StorageItem(std::string text); 
 
     int getVersion();
 
