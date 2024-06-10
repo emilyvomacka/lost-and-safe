@@ -25,14 +25,17 @@ string StorageItem::getText() {
 }
 
 void StorageItem::serialize(const string& filename) {
-    ofstream file(filename, ios::in);
-    if (!file.is_open()) {
-        cerr << "Error: Failed to open file for writing."
-            << std::endl;
-        return;
+    // Create an ofstream instance and open the file
+    ofstream file(filename, ios::binary);
+
+    // Check if the file was opened successfully
+    if (file.is_open()) {
+        // Write the version number
+        file.write("Helloworld!\n", 13);
+        // Close the file
+        file.close();
+    } else {
+        // If the file could not be opened, print an error message
+        cerr << "Unable to open file: " << filename << endl;
     }
-    file.write(reinterpret_cast<const char*>(this),
-                sizeof(*this));
-    file.close();
-    cout << "Object serialized successfully." << endl;
 }
