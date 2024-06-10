@@ -12,6 +12,6 @@ int main()
   cout << "timeLastSurfaced: " << practiceItem.getTimeLastSurfaced() << endl;
   cout << "text: " << practiceItem.getText() << endl;
 
-  string file = "../example-db.txt";
+  string file = "./test_db.bin";
   practiceItem.serialize(file);
 }

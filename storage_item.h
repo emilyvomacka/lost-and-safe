@@ -2,7 +2,7 @@
 #include <ctime>
 #include <stdexcept>
 
-constexpr int VERSION = 1; 
+int VERSION = 1; 
 
 class StorageItem {
   public:
