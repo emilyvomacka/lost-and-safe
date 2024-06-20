@@ -8,6 +8,8 @@ class StorageItem {
   public:
     StorageItem(std::string text); 
 
+    StorageItem(int version, int timesReturned, time_t timeLastSurfaced, std::string text); 
+
     int getVersion();
 
     time_t getTimeLastSurfaced();
@@ -18,11 +20,11 @@ class StorageItem {
 
     void serialize(const std::string& filename); 
 
-    // StorageItem deserialize(std::string filename);
+    static StorageItem deserialize(const std::string& filename);
 
   private:
-    int version;
-    time_t timeLastSurfaced;   
-    int timesReturned;
-    std::string text;
+    int version_;
+    int timesReturned_;
+    time_t timeLastSurfaced_;   
+    std::string text_;
 };
