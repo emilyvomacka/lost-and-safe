@@ -1,3 +1,7 @@
 lost-and-safe_build/
 example-db.txt
 .vscode/
+build/
+.cache/
+debug_build*
+libsystem_platform

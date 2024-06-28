@@ -32,12 +32,7 @@ string StorageItem::getText() {
     return text_; 
 }
 
-void StorageItem::serialize(const string& filename) {
-    // Create an ofstream instance and open the file
-    ofstream f(filename, ios::binary | ios::app);
-
-    // Check if the file was opened successfully
-    if (f.is_open()) {
+void StorageItem::serialize(ofstream& f) {
         cout << "BEGIN SERIALIZE " << f.tellp() << endl;
         f.write(reinterpret_cast<char*>(&version_), sizeof version_);
         f.write(reinterpret_cast<char*>(&timesReturned_), sizeof(int));
@@ -47,36 +42,20 @@ void StorageItem::serialize(const string& filename) {
         f.write(reinterpret_cast<char*>(&textLength), sizeof textLength);
         f.write(text_.c_str(), text_.length());
         cout << "END SERIALIZE " << endl;
-
-        f.close();
-    } else {
-        cerr << "Unable to open file: " << filename << endl;
     }
-}
 
-StorageItem StorageItem::deserialize(const string& filename) {
+StorageItem StorageItem::deserialize(ifstream& f) {
     int version;
     int timesReturned;
     time_t timeLastSurfaced;
     unsigned long textLength;
     
-    ifstream f(filename, ios::binary|ios::in);
-    if (f.is_open()) {
-        f.read(reinterpret_cast<char*>(&version), sizeof version);
-        f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
-        f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
-        f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
-        char text[textLength];
-        f.read(reinterpret_cast<char*>(text), textLength);
-        
-        return StorageItem(version, timesReturned, timeLastSurfaced, text);
-        f.close();
-    } else {
-        cout << "file didn't open";
-        if (f.fail()) { 
-            cerr << "Error details: " << strerror(errno) 
-                << endl; 
-        } 
-        return (StorageItem)NULL;
-    }
+    f.read(reinterpret_cast<char*>(&version), sizeof version);
+    f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
+    f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
+    f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
+    char text[textLength];
+    f.read(reinterpret_cast<char*>(text), textLength);
+    
+    return StorageItem(version, timesReturned, timeLastSurfaced, text);
 }

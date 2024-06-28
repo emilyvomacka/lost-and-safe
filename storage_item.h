@@ -1,6 +1,11 @@
+#ifndef _storage_item_
+#define _storage_item_
+
 #include <string>
 #include <ctime>
 #include <stdexcept>
+
+
 
 int VERSION = 1; 
 
@@ -18,9 +23,9 @@ class StorageItem {
 
     std::string getText();
 
-    void serialize(const std::string& filename); 
+    void serialize(std::ofstream& f); 
 
-    static StorageItem deserialize(const std::string& filename);
+    static StorageItem deserialize(std::ifstream& f);
 
   private:
     int version_;
@@ -28,3 +33,5 @@ class StorageItem {
     time_t timeLastSurfaced_;   
     std::string text_;
 };
+
+#endif
