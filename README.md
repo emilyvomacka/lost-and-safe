@@ -12,8 +12,8 @@ want to encounter it on every subsequent opening of my notes app until it become
 after it simmers for some indefinite amount of time. Perhaps I want to remember a conversation or a get-together or an experience, 
 but don't need to recall it at any specific moment and might actually prefer to wait awhile before re-encountering it.
 
-These situations call for storage with more stochastic whimsy than the usual implementation of instant, total and unlimited recall.
-I made the Lost and Safe database (named in homage to [The Books](https://en.wikipedia.org/wiki/Lost_and_Safe)) to help.
+These situations call for storage with more a little more stochastic whimsy.
+I made the Lost and Safe database (homage to [The Books](https://en.wikipedia.org/wiki/Lost_and_Safe)) to help.
 
 The database v1 API looks like this:
 
