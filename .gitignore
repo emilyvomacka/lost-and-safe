@@ -4,4 +4,5 @@ example-db.txt
 build/
 .cache/
 debug_build*
-libsystem_platform
+libsystem_platform.cpp
+test_db.bin

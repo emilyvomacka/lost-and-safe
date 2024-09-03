@@ -1,5 +1,6 @@
 #include "database.h"
 #include <iostream>
+#include <vector> 
 using namespace std;
 
 Database::Database(string& filename) {
@@ -25,14 +26,11 @@ StorageItem Database::recall() {
     cerr << "Error details: " << strerror(errno) 
         << endl; 
   } 
+  vector<StorageItem> results;
   if (f.is_open()) {
-    vector<StorageItem> results;
-    while // TKTK file is not at the end
-    StorageItem recalled = StorageItem::deserialize(f);
-    results.push_back(recalled);
-    }
+    StorageItem newItem = StorageItem::deserialize(f);
+    results.push_back(newItem);
     f.close();
-    return database.chooseResult();
   }
-  return (StorageItem) NULL;
-}
+  return results.back();
+  }
