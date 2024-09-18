@@ -17,7 +17,6 @@ class IndexItem {
 
   private:
     int score_;
-
     unsigned int id_; // seek distance
 };
 
