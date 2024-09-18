@@ -9,7 +9,7 @@
 
 class IndexItem {
   public:
-    IndexItem(int id); 
+    IndexItem(int id, time_t timeLastSurfaced); 
 
     int getScore();
 
