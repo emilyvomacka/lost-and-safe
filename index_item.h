@@ -9,20 +9,15 @@
 
 class IndexItem {
   public:
-    IndexItem(StorageItem& storageItem, unsigned int id); 
+    IndexItem(int id); 
 
-    int getTimesReturned();
-
-    time_t getTimeLastSurfaced();
-
-    unsigned int getRandomFactor();
+    int getScore();
 
     unsigned int getId();
 
   private:
-    int timesReturned_;
-    time_t timeLastSurfaced_;
-    unsigned int randomFactor_;
+    int score_;
+
     unsigned int id_; // seek distance
 };
 
