@@ -1,9 +1,10 @@
-#include "storage_item.cpp"
-#include "database.cpp"
+#include "storage_item.h"
+#include "database.h"
 #include <iostream>
 
 using namespace std;
 
+// Driver file while prototyping the backend
 int main()
 {
   cout << "here is: lost and safe" << endl;
@@ -13,10 +14,10 @@ int main()
   string input = "Give up your books and put an end to your worries. Enjoy Central Park in spring";
   db.store(input);
 
-  StorageItem retrievedItem = db.recall();
-  cout << "retrieved item: ";
-  cout << "version is: " << retrievedItem.getVersion() << endl;
-  cout << "times returned: " << retrievedItem.getTimesReturned() << endl;
-  cout << "timeLastSurfaced: " << retrievedItem.getTimeLastSurfaced() << endl;
-  cout << "text: " << retrievedItem.getText() << endl;
+  string retrievedText = db.recall();
+  cout << "retrieved item: " << retrievedText;
+  // cout << "version is: " << retrievedItem.getVersion() << endl;
+  // cout << "times returned: " << retrievedItem.getTimesReturned() << endl;
+  // cout << "timeLastSurfaced: " << retrievedItem.getTimeLastSurfaced() << endl;
+  // cout << "text: " << retrievedItem.getText() << endl;
 }

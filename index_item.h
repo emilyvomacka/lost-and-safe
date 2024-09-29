@@ -18,6 +18,8 @@ class IndexItem {
   private:
     int score_;
     unsigned int id_; // seek distance
+
+    int calculateScore(int id, time_t timeLastSurfaced);
 };
 
 #endif

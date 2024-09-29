@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(LostAndSafe)
 
-add_executable(LostAndSafe lost_and_safe.cpp)
+add_executable(LostAndSafe lost_and_safe.cpp database.cpp storage_item.cpp index_item.cpp)
 
 find_package(Catch2 3 REQUIRED)
 # These tests can use the Catch2-provided main

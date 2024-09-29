@@ -6,9 +6,6 @@
 #include <stdexcept>
 
 
-
-int VERSION = 1; 
-
 class StorageItem {
   public:
     StorageItem(std::string text); 

@@ -6,7 +6,8 @@
 #include <stdexcept>
 
 using namespace std;
-extern int VERSION;
+ 
+#define VERSION 1;
 
 StorageItem::StorageItem(string text) {
     version_ = VERSION;

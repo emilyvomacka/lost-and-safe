@@ -15,6 +15,6 @@ unsigned int IndexItem::getId() {
   return id_;
 }
 
-int calculateScore(int id, time_t timeLastSurfaced) {
+int IndexItem::calculateScore(int id, time_t timeLastSurfaced) {
   return 1;
 }
