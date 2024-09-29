@@ -16,8 +16,4 @@ int main()
 
   string retrievedText = db.recall();
   cout << "retrieved item: " << retrievedText;
-  // cout << "version is: " << retrievedItem.getVersion() << endl;
-  // cout << "times returned: " << retrievedItem.getTimesReturned() << endl;
-  // cout << "timeLastSurfaced: " << retrievedItem.getTimeLastSurfaced() << endl;
-  // cout << "text: " << retrievedItem.getText() << endl;
 }
