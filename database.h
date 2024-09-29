@@ -1,4 +1,6 @@
+#include "index_item.h"
 #include "storage_item.h"
+#include <vector>
 
 class Database {
   public:
@@ -6,9 +8,12 @@ class Database {
 
     void store(std::string& input);
 
-    StorageItem recall();
+    std::string recall();
 
   private:
     std::string filename_;
+    std::vector<StorageItem> results_;
+
+    std::vector<StorageItem> initializeQueue();
     StorageItem chooseResult();
 };
