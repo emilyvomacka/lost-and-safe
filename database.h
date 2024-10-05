@@ -1,5 +1,6 @@
 #include "index_item.h"
 #include "storage_item.h"
+#include "optional"
 #include <vector>
 
 class Database {
@@ -13,6 +14,8 @@ class Database {
   private:
     std::string filename_;
     std::vector<IndexItem> results_;
+    int returnQuantity_;
+    int itemsReturned_;
 
     std::vector<IndexItem> initializeQueue();
     IndexItem chooseResult();

@@ -1,14 +1,25 @@
 #include "database.h"
+#include <__memory/temporary_buffer.h>
 #include <iostream>
+#include <optional>
 #include <vector> 
 #include <fstream>
 
 using namespace std;
 
+struct compareScore {
+  bool operator()(IndexItem& a, IndexItem& b) const {
+    return a.getScore() > b.getScore();
+  }
+};
+
 Database::Database(string& filename) {
   // create new db
   filename_ = filename;
   results_ = initializeQueue();
+  returnQuantity_ = std::rand() % 3;
+  itemsReturned_ = 0;
+  cout << "db initialized, return quantity is " << returnQuantity_ << endl;
 }
 
 void Database::store(string& input) {
@@ -24,18 +35,20 @@ void Database::store(string& input) {
 }
 
 string Database::recall() {
-  // TODO
-  IndexItem result = Database::chooseResult();
-  // TODO
+  if (itemsReturned_ < returnQuantity_) {
+    IndexItem result = Database::chooseResult();
+  }
   return ""; //result.getText();
 }
 
 IndexItem Database::chooseResult() {
-  std::srand(std::time(nullptr));
-  int i = std::rand() % results_.size();
-  cout << "we have " << results_.size() << " items, returning number " << i << endl;
-  return results_.at(i);
-}
+  std::pop_heap(results_.begin(), results_.end(), compareScore());
+  IndexItem res = results_.back();
+  results_.pop_back();
+  itemsReturned_++;
+  return res;
+} 
+
 
 vector<IndexItem> Database::initializeQueue() {
   ifstream f(filename_, ios::binary|ios::in);
@@ -61,6 +74,7 @@ vector<IndexItem> Database::initializeQueue() {
       
       f.seekg(textLength, std::ios_base::cur);
     }
+    std::make_heap(results.begin(), results.end(), compareScore());
   }
   return results;
 }
