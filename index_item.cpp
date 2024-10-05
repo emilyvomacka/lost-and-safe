@@ -2,9 +2,9 @@
 
 using namespace std;
 
-IndexItem::IndexItem(int id, time_t timeLastSurfaced) {
+IndexItem::IndexItem(int id, int timesReturned, time_t timeLastSurfaced) {
   id_ = id;
-  score_ = calculateScore(id, timeLastSurfaced);
+  score_ = calculateScore(id, timesReturned, timeLastSurfaced);
 }
 
 int IndexItem::getScore() {
@@ -15,6 +15,6 @@ unsigned int IndexItem::getId() {
   return id_;
 }
 
-int IndexItem::calculateScore(int id, time_t timeLastSurfaced) {
+int IndexItem::calculateScore(int id, int timesReturned, time_t timeLastSurfaced) {
   return 1;
 }

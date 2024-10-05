@@ -9,7 +9,7 @@
 
 class IndexItem {
   public:
-    IndexItem(int id, time_t timeLastSurfaced); 
+    IndexItem(int id, int timesReturned, time_t timeLastSurfaced);
 
     int getScore();
 
@@ -19,7 +19,7 @@ class IndexItem {
     int score_;
     unsigned int id_; // seek distance
 
-    int calculateScore(int id, time_t timeLastSurfaced);
+    int calculateScore(int id, int timesReturned, time_t timeLastSurfaced);
 };
 
 #endif

@@ -12,8 +12,8 @@ class Database {
 
   private:
     std::string filename_;
-    std::vector<StorageItem> results_;
+    std::vector<IndexItem> results_;
 
-    std::vector<StorageItem> initializeQueue();
-    StorageItem chooseResult();
+    std::vector<IndexItem> initializeQueue();
+    IndexItem chooseResult();
 };

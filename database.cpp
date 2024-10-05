@@ -25,31 +25,41 @@ void Database::store(string& input) {
 
 string Database::recall() {
   // TODO
-  StorageItem result = Database::chooseResult();
-  return result.getText();
+  IndexItem result = Database::chooseResult();
+  // TODO
+  return ""; //result.getText();
 }
 
-StorageItem Database::chooseResult() {
+IndexItem Database::chooseResult() {
   std::srand(std::time(nullptr));
   int i = std::rand() % results_.size();
   cout << "we have " << results_.size() << " items, returning number " << i << endl;
   return results_.at(i);
 }
 
-vector<StorageItem> Database::initializeQueue() {
+vector<IndexItem> Database::initializeQueue() {
   ifstream f(filename_, ios::binary|ios::in);
   if (f.fail()) { 
     cerr << "Error details: " << strerror(errno) 
         << endl;
   }
-  vector<StorageItem> results;
+  vector<IndexItem> results;
   if (f.is_open()) {
-    int i = 0;
     while (f.peek() != EOF) {
-      StorageItem newItem = StorageItem::deserialize(f);
-      results.push_back(newItem);
-      cout << "read item number " << i << endl;
-      i++;
+      int timesReturned;
+      time_t timeLastSurfaced;
+      unsigned long textLength;
+      
+      // Skipping past version right now as we're on version 1
+      f.seekg(sizeof(int), std::ios_base::cur);
+      f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
+      f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
+      f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
+
+      IndexItem item = IndexItem(1, timesReturned, timeLastSurfaced);  
+      results.push_back(item);
+      
+      f.seekg(textLength, std::ios_base::cur);
     }
   }
   return results;
