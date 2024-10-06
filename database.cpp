@@ -58,18 +58,20 @@ vector<IndexItem> Database::initializeQueue() {
   }
   vector<IndexItem> results;
   if (f.is_open()) {
+    int id;
+    int timesReturned;
+    time_t timeLastSurfaced;
+    unsigned long textLength;
+    
     while (f.peek() != EOF) {
-      int timesReturned;
-      time_t timeLastSurfaced;
-      unsigned long textLength;
-      
+      id = f.tellg();
       // Skipping past version right now as we're on version 1
       f.seekg(sizeof(int), std::ios_base::cur);
       f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
       f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
       f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
 
-      IndexItem item = IndexItem(1, timesReturned, timeLastSurfaced);  
+      IndexItem item = IndexItem(id, timesReturned, timeLastSurfaced);  
       results.push_back(item);
       
       f.seekg(textLength, std::ios_base::cur);
