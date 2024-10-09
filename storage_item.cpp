@@ -27,7 +27,15 @@ int StorageItem::getVersion() { return version_; }
 
 int StorageItem::getTimesReturned() { return timesReturned_; }
 
+void StorageItem::setTimesReturned(int timesReturned) {
+    timesReturned_ = timesReturned;
+}
+
 time_t StorageItem::getTimeLastSurfaced() { return timeLastSurfaced_; }
+
+void StorageItem::setTimeLastSurfaced(time_t time) {
+    timeLastSurfaced_ = time;
+}
 
 string StorageItem::getText() { 
     return text_; 

@@ -78,7 +78,6 @@ IndexItem Database::chooseResult() {
   return res;
 } 
 
-
 vector<IndexItem> Database::initializeQueue() {
   ifstream f(filename_, ios::binary|ios::in);
   if (f.fail()) { 

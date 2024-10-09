@@ -16,7 +16,11 @@ class StorageItem {
 
     time_t getTimeLastSurfaced();
 
+    void setTimeLastSurfaced(time_t timeLastSurfaced);
+
     int getTimesReturned();
+
+    void setTimesReturned(int timesReturned);
 
     std::string getText();
 
