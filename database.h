@@ -19,4 +19,5 @@ class Database {
 
     std::vector<IndexItem> initializeQueue();
     IndexItem chooseResult();
+    StorageItem deserializeFromIndex(int index);
 };

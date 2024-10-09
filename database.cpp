@@ -17,14 +17,13 @@ Database::Database(string& filename) {
   // create new db
   filename_ = filename;
   results_ = initializeQueue();
-  returnQuantity_ = std::rand() % 3;
+  returnQuantity_ = std::rand() % 9;
   itemsReturned_ = 0;
   cout << "db initialized, return quantity is " << returnQuantity_ << endl;
 }
 
 void Database::store(string& input) {
   StorageItem practiceItem = StorageItem(input);
-  // Create an ofstream instance and open the file
   ofstream f(filename_, ios::binary | ios::app);
   if (f.is_open()) {
     practiceItem.serialize(f);
@@ -34,11 +33,41 @@ void Database::store(string& input) {
   f.close();
 }
 
-string Database::recall() {
-  if (itemsReturned_ < returnQuantity_) {
-    IndexItem result = Database::chooseResult();
+StorageItem Database::deserializeFromIndex(int id) {
+  ifstream f(filename_, ios::binary|ios::in);
+  if (f.fail()) { 
+    cerr << "Error details: " << strerror(errno) << endl;
   }
-  return ""; //result.getText();
+  f.seekg(id, std::ios_base::beg); 
+  
+  int version;
+  int timesReturned;
+  time_t timeLastSurfaced;
+  unsigned long textLength;
+    
+  f.read(reinterpret_cast<char*>(&version), sizeof version);
+  f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
+  f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
+  f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
+  char text[textLength];
+  f.read(reinterpret_cast<char*>(text), textLength);
+    
+  return StorageItem(version, timesReturned, timeLastSurfaced, text);
+}
+
+string Database::recall() {
+  if (itemsReturned_ == returnQuantity_) {
+    return "Only " + to_string(returnQuantity_) + " items will be returned today.";
+  }
+
+  IndexItem resultIndex = Database::chooseResult();
+
+  StorageItem resultItem = Database::deserializeFromIndex(resultIndex.getId());
+  // set time last seen
+  // set times returned
+  // serialize it 
+
+  return resultItem.getText();
 }
 
 IndexItem Database::chooseResult() {
