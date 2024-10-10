@@ -20,4 +20,5 @@ class Database {
     std::vector<IndexItem> initializeQueue();
     IndexItem chooseResult();
     StorageItem deserializeFromIndex(int index);
+    void serializeStorageItem(StorageItem storageItem);
 };

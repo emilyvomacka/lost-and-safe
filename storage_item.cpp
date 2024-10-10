@@ -25,13 +25,19 @@ StorageItem::StorageItem(int version, int timesReturned, time_t timeLastSurfaced
 
 int StorageItem::getVersion() { return version_; }
 
+int* StorageItem::getVersionPointer() { return &version_; }
+
 int StorageItem::getTimesReturned() { return timesReturned_; }
+
+int* StorageItem::getTimesReturnedPointer() { return &timesReturned_; }
 
 void StorageItem::setTimesReturned(int timesReturned) {
     timesReturned_ = timesReturned;
 }
 
 time_t StorageItem::getTimeLastSurfaced() { return timeLastSurfaced_; }
+
+time_t* StorageItem::getTimeLastSurfacedPointer() { return &timeLastSurfaced_; }
 
 void StorageItem::setTimeLastSurfaced(time_t time) {
     timeLastSurfaced_ = time;
@@ -40,18 +46,6 @@ void StorageItem::setTimeLastSurfaced(time_t time) {
 string StorageItem::getText() { 
     return text_; 
 }
-
-void StorageItem::serialize(ofstream& f) {
-        cout << "BEGIN SERIALIZE " << f.tellp() << endl;
-        f.write(reinterpret_cast<char*>(&version_), sizeof version_);
-        f.write(reinterpret_cast<char*>(&timesReturned_), sizeof(int));
-        f.write(reinterpret_cast<char*>(&timeLastSurfaced_), sizeof(time_t));
-        // first write the size of the string for deserialization
-        unsigned long textLength = text_.length();
-        f.write(reinterpret_cast<char*>(&textLength), sizeof textLength);
-        f.write(text_.c_str(), text_.length());
-        cout << "END SERIALIZE " << endl;
-    }
 
 StorageItem StorageItem::deserialize(ifstream& f) {
     int version;

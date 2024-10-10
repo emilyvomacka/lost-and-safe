@@ -14,17 +14,21 @@ class StorageItem {
 
     int getVersion();
 
+    int* getVersionPointer();
+
     time_t getTimeLastSurfaced();
+
+    time_t* getTimeLastSurfacedPointer();
 
     void setTimeLastSurfaced(time_t timeLastSurfaced);
 
     int getTimesReturned();
+    
+    int* getTimesReturnedPointer();
 
     void setTimesReturned(int timesReturned);
 
     std::string getText();
-
-    void serialize(std::ofstream& f); 
 
     static StorageItem deserialize(std::ifstream& f);
 

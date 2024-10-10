@@ -23,14 +23,13 @@ Database::Database(string& filename) {
 }
 
 void Database::store(string& input) {
-  StorageItem practiceItem = StorageItem(input);
+  StorageItem item = StorageItem(input);
   ofstream f(filename_, ios::binary | ios::app);
   if (f.is_open()) {
-    practiceItem.serialize(f);
+    serializeStorageItem(item);
   } else {
       cerr << "Unable to open file: " << filename_ << endl;
   }
-  f.close();
 }
 
 StorageItem Database::deserializeFromIndex(int id) {
@@ -51,8 +50,25 @@ StorageItem Database::deserializeFromIndex(int id) {
   f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
   char text[textLength];
   f.read(reinterpret_cast<char*>(text), textLength);
-    
+   
   return StorageItem(version, timesReturned, timeLastSurfaced, text);
+}
+
+void Database::serializeStorageItem(StorageItem storageItem) {
+  ofstream f(filename_, ios::binary | ios::app);
+  if (!f.is_open()) {
+      cerr << "Unable to open file: " << filename_ << endl;
+      return;
+  }
+  cout << "BEGIN DATABASE SERIALIZE " << f.tellp() << endl;
+  f.write(reinterpret_cast<char*>(storageItem.getVersionPointer()), sizeof(int));
+  f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
+  f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
+  // first write the size of the string for deserialization
+  unsigned long textLength = storageItem.getText().length();
+  f.write(reinterpret_cast<char*>(&textLength), sizeof(unsigned long));
+  f.write(storageItem.getText().c_str(), textLength);
+  cout << "END DATABASE SERIALIZE " << endl;
 }
 
 string Database::recall() {
@@ -64,8 +80,11 @@ string Database::recall() {
 
   StorageItem resultItem = Database::deserializeFromIndex(resultIndex.getId());
   // set time last seen
+  resultItem.setTimeLastSurfaced(time(nullptr));
   // set times returned
+  resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
   // serialize it 
+
 
   return resultItem.getText();
 }
