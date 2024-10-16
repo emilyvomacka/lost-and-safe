@@ -1,5 +1,4 @@
 #include "database.h"
-#include <__memory/temporary_buffer.h>
 #include <iostream>
 #include <optional>
 #include <vector> 
@@ -24,12 +23,12 @@ Database::Database(string& filename) {
 
 void Database::store(string& input) {
   StorageItem item = StorageItem(input);
-  ofstream f(filename_, ios::binary | ios::app);
-  if (f.is_open()) {
-    serializeStorageItem(item);
-  } else {
+  ofstream f(filename_, ios::binary|ios::app);
+  if (!f.is_open()) {
       cerr << "Unable to open file: " << filename_ << endl;
+      return;
   }
+  serializeStorageItem(item);
 }
 
 StorageItem Database::deserializeFromIndex(int id) {
@@ -43,7 +42,7 @@ StorageItem Database::deserializeFromIndex(int id) {
   int timesReturned;
   time_t timeLastSurfaced;
   unsigned long textLength;
-    
+   
   f.read(reinterpret_cast<char*>(&version), sizeof version);
   f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
   f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
@@ -69,6 +68,16 @@ void Database::serializeStorageItem(StorageItem storageItem) {
   f.write(reinterpret_cast<char*>(&textLength), sizeof(unsigned long));
   f.write(storageItem.getText().c_str(), textLength);
   cout << "END DATABASE SERIALIZE " << endl;
+}
+
+void Database::serializeStorageItem(StorageItem storageItem, int index) {
+  ofstream f(filename_, ios::binary|ios::out);
+  if (!f.is_open()) {
+      cerr << "Unable to open file: " << filename_ << endl;
+      return;
+  }
+  f.seekp(index, std::ios_base::beg);
+  serializeStorageItem(storageItem);
 }
 
 string Database::recall() {

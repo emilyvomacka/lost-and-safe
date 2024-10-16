@@ -46,19 +46,3 @@ void StorageItem::setTimeLastSurfaced(time_t time) {
 string StorageItem::getText() { 
     return text_; 
 }
-
-StorageItem StorageItem::deserialize(ifstream& f) {
-    int version;
-    int timesReturned;
-    time_t timeLastSurfaced;
-    unsigned long textLength;
-    
-    f.read(reinterpret_cast<char*>(&version), sizeof version);
-    f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
-    f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
-    f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
-    char text[textLength];
-    f.read(reinterpret_cast<char*>(text), textLength);
-    
-    return StorageItem(version, timesReturned, timeLastSurfaced, text);
-}

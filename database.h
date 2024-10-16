@@ -21,4 +21,5 @@ class Database {
     IndexItem chooseResult();
     StorageItem deserializeFromIndex(int index);
     void serializeStorageItem(StorageItem storageItem);
+    void serializeStorageItem(StorageItem storageItem, int index);
 };
