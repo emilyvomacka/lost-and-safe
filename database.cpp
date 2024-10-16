@@ -84,6 +84,9 @@ string Database::recall() {
   if (itemsReturned_ == returnQuantity_) {
     return "Only " + to_string(returnQuantity_) + " items will be returned today.";
   }
+  if (results_.size() == 0) {
+    return "nothing here srry"; 
+  }
 
   IndexItem resultIndex = Database::chooseResult();
 
