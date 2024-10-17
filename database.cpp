@@ -1,10 +1,13 @@
 #include "database.h"
+#include <fstream>
 #include <iostream>
 #include <optional>
+#include <random>
 #include <vector> 
-#include <fstream>
 
 using namespace std;
+
+#define RANDOM_FACTOR 0.5f
 
 struct compareScore {
   bool operator()(IndexItem& a, IndexItem& b) const {
@@ -96,6 +99,7 @@ string Database::recall() {
   // set times returned
   resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
   // serialize it 
+  Database::serializeStorageItem(resultItem, resultIndex.getId());
 
 
   return resultItem.getText();
@@ -117,6 +121,10 @@ vector<IndexItem> Database::initializeQueue() {
   }
   vector<IndexItem> results;
   if (f.is_open()) {
+    std::random_device rd; // obtain a random number from hardware
+    std::mt19937 gen(rd()); // seed the generator
+    std::uniform_real_distribution<> distr(1 - RANDOM_FACTOR, 1 + RANDOM_FACTOR); 
+
     int id;
     int timesReturned;
     time_t timeLastSurfaced;
@@ -130,7 +138,7 @@ vector<IndexItem> Database::initializeQueue() {
       f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
       f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
 
-      IndexItem item = IndexItem(id, timesReturned, timeLastSurfaced);  
+      IndexItem item = IndexItem(id, timesReturned, timeLastSurfaced, distr(gen));  
       results.push_back(item);
       
       f.seekg(textLength, std::ios_base::cur);
