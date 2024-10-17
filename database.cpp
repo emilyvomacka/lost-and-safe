@@ -9,12 +9,6 @@ using namespace std;
 
 #define RANDOM_FACTOR 0.5f
 
-struct compareScore {
-  bool operator()(IndexItem& a, IndexItem& b) const {
-    return a.getScore() > b.getScore();
-  }
-};
-
 Database::Database(string& filename) {
   // create new db
   filename_ = filename;
@@ -23,95 +17,6 @@ Database::Database(string& filename) {
   itemsReturned_ = 0;
   cout << "db initialized, return quantity is " << returnQuantity_ << endl;
 }
-
-void Database::store(string& input) {
-  StorageItem item = StorageItem(input);
-  ofstream f(filename_, ios::binary|ios::app);
-  if (!f.is_open()) {
-      cerr << "Unable to open file: " << filename_ << endl;
-      return;
-  }
-  serializeStorageItem(item);
-}
-
-StorageItem Database::deserializeFromIndex(int id) {
-  ifstream f(filename_, ios::binary|ios::in);
-  if (f.fail()) { 
-    cerr << "Error details: " << strerror(errno) << endl;
-  }
-  f.seekg(id, std::ios_base::beg); 
-  
-  int version;
-  int timesReturned;
-  time_t timeLastSurfaced;
-  unsigned long textLength;
-   
-  f.read(reinterpret_cast<char*>(&version), sizeof version);
-  f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
-  f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
-  f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
-  char text[textLength];
-  f.read(reinterpret_cast<char*>(text), textLength);
-   
-  return StorageItem(version, timesReturned, timeLastSurfaced, text);
-}
-
-void Database::serializeStorageItem(StorageItem storageItem) {
-  ofstream f(filename_, ios::binary | ios::app);
-  if (!f.is_open()) {
-      cerr << "Unable to open file: " << filename_ << endl;
-      return;
-  }
-  cout << "BEGIN DATABASE SERIALIZE " << f.tellp() << endl;
-  f.write(reinterpret_cast<char*>(storageItem.getVersionPointer()), sizeof(int));
-  f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
-  f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
-  // first write the size of the string for deserialization
-  unsigned long textLength = storageItem.getText().length();
-  f.write(reinterpret_cast<char*>(&textLength), sizeof(unsigned long));
-  f.write(storageItem.getText().c_str(), textLength);
-  cout << "END DATABASE SERIALIZE " << endl;
-}
-
-void Database::serializeStorageItem(StorageItem storageItem, int index) {
-  ofstream f(filename_, ios::binary|ios::out);
-  if (!f.is_open()) {
-      cerr << "Unable to open file: " << filename_ << endl;
-      return;
-  }
-  f.seekp(index, std::ios_base::beg);
-  serializeStorageItem(storageItem);
-}
-
-string Database::recall() {
-  if (itemsReturned_ == returnQuantity_) {
-    return "Only " + to_string(returnQuantity_) + " items will be returned today.";
-  }
-  if (results_.size() == 0) {
-    return "nothing here srry"; 
-  }
-
-  IndexItem resultIndex = Database::chooseResult();
-
-  StorageItem resultItem = Database::deserializeFromIndex(resultIndex.getId());
-  // set time last seen
-  resultItem.setTimeLastSurfaced(time(nullptr));
-  // set times returned
-  resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
-  // serialize it 
-  Database::serializeStorageItem(resultItem, resultIndex.getId());
-
-
-  return resultItem.getText();
-}
-
-IndexItem Database::chooseResult() {
-  std::pop_heap(results_.begin(), results_.end(), compareScore());
-  IndexItem res = results_.back();
-  results_.pop_back();
-  itemsReturned_++;
-  return res;
-} 
 
 vector<IndexItem> Database::initializeQueue() {
   ifstream f(filename_, ios::binary|ios::in);
@@ -147,3 +52,102 @@ vector<IndexItem> Database::initializeQueue() {
   }
   return results;
 }
+
+struct compareScore {
+  bool operator()(IndexItem& a, IndexItem& b) const {
+    return a.getScore() > b.getScore();
+  }
+};
+
+void Database::store(string& input) {
+  StorageItem item = StorageItem(input);
+  ofstream f(filename_, ios::binary|ios::app);
+  if (!f.is_open()) {
+      cerr << "Unable to open file: " << filename_ << endl;
+      return;
+  }
+  serializeStorageItem(item);
+}
+
+void Database::serializeStorageItem(StorageItem storageItem) {
+  ofstream f(filename_, ios::binary | ios::app);
+  if (!f.is_open()) {
+      cerr << "Unable to open file: " << filename_ << endl;
+      return;
+  }
+  f.write(reinterpret_cast<char*>(storageItem.getVersionPointer()), sizeof(int));
+  f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
+  f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
+  // First write the size of the string for deserialization.
+  unsigned long textLength = storageItem.getText().length();
+  f.write(reinterpret_cast<char*>(&textLength), sizeof(unsigned long));
+  f.write(storageItem.getText().c_str(), textLength);
+}
+
+void Database::serializeStorageItem(StorageItem storageItem, int index) {
+  ofstream f(filename_, ios::binary|ios::out);
+  if (!f.is_open()) {
+      cerr << "Unable to open file: " << filename_ << endl;
+      return;
+  }
+  f.seekp(index, std::ios_base::beg);
+  serializeStorageItem(storageItem);
+}
+
+string Database::recall() {
+  if (itemsReturned_ == returnQuantity_) {
+    return "Only " + to_string(returnQuantity_) + " items will be returned today.";
+  }
+  if (results_.size() == 0) {
+    return "Nothing here yet, try adding something?"; 
+  }
+
+  IndexItem resultIndex = Database::chooseResult();
+
+  StorageItem resultItem = Database::deserializeFromIndex(resultIndex.getId());
+
+  // Update resultItem so it doesn't resurface as easily next time.
+  resultItem.setTimeLastSurfaced(time(nullptr));
+  resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
+  Database::serializeStorageItem(resultItem, resultIndex.getId());
+
+  return resultItem.getText();
+}
+
+IndexItem Database::chooseResult() {
+  std::pop_heap(results_.begin(), results_.end(), compareScore());
+  IndexItem res = results_.back();
+  results_.pop_back();
+  itemsReturned_++;
+  return res;
+} 
+
+StorageItem Database::deserializeFromIndex(int id) {
+  ifstream f(filename_, ios::binary|ios::in);
+  if (f.fail()) { 
+    cerr << "Error details: " << strerror(errno) << endl;
+  }
+  f.seekg(id, std::ios_base::beg); 
+  
+  int version;
+  int timesReturned;
+  time_t timeLastSurfaced;
+  unsigned long textLength;
+   
+  f.read(reinterpret_cast<char*>(&version), sizeof version);
+  f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
+  f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
+  f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
+  char text[textLength];
+  f.read(reinterpret_cast<char*>(text), textLength);
+   
+  return StorageItem(version, timesReturned, timeLastSurfaced, text);
+}
+
+
+
+
+
+
+
+
