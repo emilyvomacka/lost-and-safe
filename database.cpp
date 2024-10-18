@@ -18,6 +18,12 @@ Database::Database(string& filename) {
   cout << "db initialized, return quantity is " << returnQuantity_ << endl;
 }
 
+struct compareScore {
+  bool operator()(IndexItem& a, IndexItem& b) const {
+    return a.getScore() < b.getScore();
+  }
+};
+
 vector<IndexItem> Database::initializeQueue() {
   ifstream f(filename_, ios::binary|ios::in);
   if (f.fail()) { 
@@ -53,12 +59,6 @@ vector<IndexItem> Database::initializeQueue() {
   return results;
 }
 
-struct compareScore {
-  bool operator()(IndexItem& a, IndexItem& b) const {
-    return a.getScore() > b.getScore();
-  }
-};
-
 void Database::store(string& input) {
   StorageItem item = StorageItem(input);
   ofstream f(filename_, ios::binary|ios::app);
@@ -75,6 +75,7 @@ void Database::serializeStorageItem(StorageItem storageItem) {
       cerr << "Unable to open file: " << filename_ << endl;
       return;
   }
+  cout << "serializing without specified index, file pointer at " << f.tellp() << endl;
   f.write(reinterpret_cast<char*>(storageItem.getVersionPointer()), sizeof(int));
   f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
   f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
@@ -85,13 +86,20 @@ void Database::serializeStorageItem(StorageItem storageItem) {
 }
 
 void Database::serializeStorageItem(StorageItem storageItem, int index) {
-  ofstream f(filename_, ios::binary|ios::out);
+  fstream f(filename_, ios::binary|ios::in|ios::out);
   if (!f.is_open()) {
       cerr << "Unable to open file: " << filename_ << endl;
       return;
   }
   f.seekp(index, std::ios_base::beg);
-  serializeStorageItem(storageItem);
+  cout << "serializing with specified index, file pointer at " << f.tellp() << endl;
+  f.write(reinterpret_cast<char*>(storageItem.getVersionPointer()), sizeof(int));
+  f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
+  f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
+  // First write the size of the string for deserialization.
+  unsigned long textLength = storageItem.getText().length();
+  f.write(reinterpret_cast<char*>(&textLength), sizeof(unsigned long));
+  f.write(storageItem.getText().c_str(), textLength); 
 }
 
 string Database::recall() {
@@ -105,10 +113,11 @@ string Database::recall() {
   IndexItem resultIndex = Database::chooseResult();
 
   StorageItem resultItem = Database::deserializeFromIndex(resultIndex.getId());
-
+  cout << "recalled item at index " << resultIndex.getId() << endl;
   // Update resultItem so it doesn't resurface as easily next time.
   resultItem.setTimeLastSurfaced(time(nullptr));
   resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
+  cout << "result item has been updated, times returned is now " << resultItem.getTimesReturned() << endl;
   Database::serializeStorageItem(resultItem, resultIndex.getId());
 
   return resultItem.getText();

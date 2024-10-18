@@ -18,13 +18,13 @@ int main(int argc, char* argv[])
   } 
   
   Database db = Database(fileName);
-
+  cout << "storing phase begins! store 100 items" << endl;
   // Testing adding a variety of items to see the variance in scores
-  // for (int i = 0; i < 100; i++) {
-  //   string input = "Give up your books and put an end to your worries. Enjoy Central Park in spring";
-  //   db.store(input);
-  // }
-
-  string retrievedText = db.recall();
-  cout << "retrieved item: " << retrievedText << endl;
+  for (int i = 0; i < 100; i++) {
+    string input = "Give up your books and put an end to your worries. Enjoy Central Park in spring";
+    db.store(input);
+  }
+  cout << "recall phase begins! recalling one item" << endl;
+  string recalledText = db.recall();
+  cout << "recalled item: " << recalledText << endl;
 };
