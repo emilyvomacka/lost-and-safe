@@ -85,7 +85,7 @@ void Database::serializeStorageItem(StorageItem storageItem) {
   f.write(storageItem.getText().c_str(), textLength);
 }
 
-void Database::serializeStorageItem(StorageItem storageItem, int index) {
+void Database::reserializeStorageItem(StorageItem storageItem, int index) {
   fstream f(filename_, ios::binary|ios::in|ios::out);
   if (!f.is_open()) {
       cerr << "Unable to open file: " << filename_ << endl;
@@ -93,13 +93,12 @@ void Database::serializeStorageItem(StorageItem storageItem, int index) {
   }
   f.seekp(index, std::ios_base::beg);
   cout << "serializing with specified index, file pointer at " << f.tellp() << endl;
-  f.write(reinterpret_cast<char*>(storageItem.getVersionPointer()), sizeof(int));
+  // We never change the version, skip past it.
+  f.seekg(sizeof(int), std::ios_base::cur);
+  // Write the updated timesReturned and timeLastSurfaced vars.
   f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
   f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
-  // First write the size of the string for deserialization.
-  unsigned long textLength = storageItem.getText().length();
-  f.write(reinterpret_cast<char*>(&textLength), sizeof(unsigned long));
-  f.write(storageItem.getText().c_str(), textLength); 
+  // We never change the text, so no updates necessary there.
 }
 
 string Database::recall() {
@@ -118,7 +117,7 @@ string Database::recall() {
   resultItem.setTimeLastSurfaced(time(nullptr));
   resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
   cout << "result item has been updated, times returned is now " << resultItem.getTimesReturned() << endl;
-  Database::serializeStorageItem(resultItem, resultIndex.getId());
+  Database::reserializeStorageItem(resultItem, resultIndex.getId());
 
   return resultItem.getText();
 }
