@@ -150,8 +150,10 @@ StorageItem Database::deserializeFromIndex(int id) {
   f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
   char text[textLength];
   f.read(reinterpret_cast<char*>(text), textLength);
+  // Convert char[] to string to avoid clobbering risk! 
+  string textString = text;
    
-  return StorageItem(version, timesReturned, timeLastSurfaced, text);
+  return StorageItem(version, timesReturned, timeLastSurfaced, textString);
 }
 
 
