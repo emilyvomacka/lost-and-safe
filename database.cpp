@@ -13,7 +13,7 @@ Database::Database(string& filename) {
   // create new db
   filename_ = filename;
   results_ = initializeQueue();
-  returnQuantity_ = std::rand() % 9;
+  returnQuantity_ = std::rand() % 9 + 1;
   itemsReturned_ = 0;
   cout << "db initialized, return quantity is " << returnQuantity_ << endl;
 }
