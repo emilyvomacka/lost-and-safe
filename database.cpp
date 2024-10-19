@@ -1,4 +1,5 @@
 #include "database.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <optional>
