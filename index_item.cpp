@@ -21,6 +21,5 @@ unsigned int IndexItem::getId() {
 
 int IndexItem::calculateScore(int timesReturned, time_t timeLastSurfaced, float randomFactor) {
   int score = randomFactor * pow(0.1, timesReturned) * (time(nullptr) - timeLastSurfaced);
-  cout << "Score is " << score << endl;
   return score;
 }

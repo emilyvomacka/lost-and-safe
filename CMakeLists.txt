@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project(LostAndSafe)
+project(lsdb)
 
-add_executable(LostAndSafe lost_and_safe.cpp database.cpp storage_item.cpp index_item.cpp)
+add_executable(lsdb lost_and_safe.cpp database.cpp storage_item.cpp index_item.cpp)
+
+install(TARGETS lsdb)
 
 # find_package(Catch2 3 REQUIRED)
 # These tests can use the Catch2-provided main
