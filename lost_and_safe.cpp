@@ -1,6 +1,7 @@
 #include "storage_item.h"
 #include "database.h"
 #include <iostream>
+#include <set>
 #include <string>
 #include <optional>
 
@@ -13,18 +14,32 @@ int main(int argc, char* argv[])
   string fileName = "test_db.bin";
 
   // Parse command line arguments
-  if (argc > 1) {
-    fileName = argv[1];
-  } 
-  
-  Database db = Database(fileName);
-  cout << "storing phase begins! store 100 items" << endl;
-  // Testing adding a variety of items to see the variance in scores
-  for (int i = 0; i < 100; i++) {
-    string input = "Give up your books and put an end to your worries. Enjoy Central Park in spring";
-    db.store(input);
+  if (argc < 2) {
+    cout << "Please append store or recall" << endl;
+    return -1;
   }
-  cout << "recall phase begins! recalling one item" << endl;
-  string recalledText = db.recall();
-  cout << "recalled item: " << recalledText << endl;
+
+  string subcommand = argv[1];
+
+  if (subcommand == "store") {
+    if (argc != 3) {
+      cout << "Please try: lsdb store <text>, being sure to enclose the text in quotes" << endl;
+      return -1;
+    }
+    Database db = Database(fileName);
+    string text = argv[2];
+    db.store(text);
+    cout << "Successfully stored " << text << endl;
+  } else if (subcommand == "recall") {
+    if (argc != 2) {
+      cout << "Please try: lsdb recall" << endl;
+      return -1;
+    }
+    Database db = Database(fileName);
+    cout << db.recall() << endl;
+  } else {
+    cout << "Available subcommands: store <text>, recall" << endl;
+    return -1;
+  }
+  return 0;
 };
