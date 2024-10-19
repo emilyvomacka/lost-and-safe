@@ -155,11 +155,3 @@ StorageItem Database::deserializeFromIndex(int id) {
    
   return StorageItem(version, timesReturned, timeLastSurfaced, textString);
 }
-
-
-
-
-
-
-
-

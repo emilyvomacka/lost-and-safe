@@ -23,4 +23,3 @@ and returns items with equal frequency. It is rate-limited to one retrieval per 
 
 Things you store here are lost: the database encrypts them on disk and will not permit fetching of any specific entry. They are also safe: whatever you store 
 will come back to you eventually with enough calls to the database. 
-
