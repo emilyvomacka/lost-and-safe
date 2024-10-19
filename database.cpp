@@ -14,7 +14,8 @@ Database::Database(string& filename) {
   // create new db
   filename_ = filename;
   results_ = initializeQueue();
-  returnQuantity_ = std::rand() % 9 + 1;
+  srand(time(0));
+  returnQuantity_ = std::rand() % 5 + 3;
   itemsReturned_ = 0;
   cout << "db initialized, return quantity is " << returnQuantity_ << endl;
 }
