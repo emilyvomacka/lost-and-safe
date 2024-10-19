@@ -2,8 +2,10 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <optional>
 #include <random>
+#include <string>
 #include <vector> 
 
 using namespace std;
@@ -150,8 +152,7 @@ StorageItem Database::deserializeFromIndex(int id) {
   f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
   char text[textLength];
   f.read(reinterpret_cast<char*>(text), textLength);
-  // Convert char[] to string to avoid clobbering risk! 
-  string textString = text;
-   
-  return StorageItem(version, timesReturned, timeLastSurfaced, textString);
+  // Reassign the char[] to a std::string, to avoid potential clobbering!
+  string s(text);
+  return StorageItem(version, timesReturned, timeLastSurfaced, s);
 }
