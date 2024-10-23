@@ -150,8 +150,10 @@ StorageItem Database::deserializeFromIndex(int id) {
   f.read(reinterpret_cast<char*>(&timesReturned), sizeof timesReturned);
   f.read(reinterpret_cast<char*>(&timeLastSurfaced), sizeof timeLastSurfaced);
   f.read(reinterpret_cast<char*>(&textLength), sizeof textLength);
-  char text[textLength];
+  // Add 1 for the null terminator
+  char text[textLength + 1];
   f.read(reinterpret_cast<char*>(text), textLength);
+  text[textLength] = '\0';
   // Reassign the char[] to a std::string, to avoid potential clobbering!
   string s(text);
   return StorageItem(version, timesReturned, timeLastSurfaced, s);
