@@ -19,7 +19,7 @@ Database::Database(string& filename) {
   srand(time(0));
   returnQuantity_ = std::rand() % 5 + 3;
   itemsReturned_ = 0;
-  cout << "db initialized, return quantity is " << returnQuantity_ << endl;
+  cout << "LSDB initialized, return quantity is " << returnQuantity_ << endl;
 }
 
 struct compareScore {
@@ -79,7 +79,6 @@ void Database::serializeStorageItem(StorageItem storageItem) {
       cerr << "Unable to open file: " << filename_ << endl;
       return;
   }
-  cout << "serializing without specified index, file pointer at " << f.tellp() << endl;
   f.write(reinterpret_cast<char*>(storageItem.getVersionPointer()), sizeof(int));
   f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
   f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
@@ -96,7 +95,6 @@ void Database::reserializeStorageItem(StorageItem storageItem, int index) {
       return;
   }
   f.seekp(index, std::ios_base::beg);
-  cout << "serializing with specified index, file pointer at " << f.tellp() << endl;
   // We never change the version, skip past it.
   f.seekg(sizeof(int), std::ios_base::cur);
   // Write the updated timesReturned and timeLastSurfaced vars.
@@ -116,11 +114,9 @@ string Database::recall() {
   IndexItem resultIndex = Database::chooseResult();
 
   StorageItem resultItem = Database::deserializeFromIndex(resultIndex.getId());
-  cout << "recalled item at index " << resultIndex.getId() << endl;
   // Update resultItem so it doesn't resurface as easily next time.
   resultItem.setTimeLastSurfaced(time(nullptr));
   resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
-  cout << "result item has been updated, times returned is now " << resultItem.getTimesReturned() << endl;
   Database::reserializeStorageItem(resultItem, resultIndex.getId());
 
   return resultItem.getText();

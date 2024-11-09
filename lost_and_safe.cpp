@@ -10,7 +10,6 @@ using namespace std;
 // Driver file while prototyping the backend
 int main(int argc, char* argv[])
 {
-  cout << "here is: lost and safe" << endl;
   string fileName = "test_db.bin";
 
   // Parse command line arguments
