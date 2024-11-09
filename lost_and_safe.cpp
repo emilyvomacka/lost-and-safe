@@ -1,9 +1,11 @@
 #include "storage_item.h"
 #include "database.h"
+#include <ctime>
+#include <iomanip>
 #include <iostream>
+#include <optional>
 #include <set>
 #include <string>
-#include <optional>
 
 using namespace std;
 
@@ -35,7 +37,12 @@ int main(int argc, char* argv[])
       return -1;
     }
     Database db = Database(fileName);
-    cout << db.recall() << endl;
+    if (optional<StorageItem> item = db.recall()) {
+      cout << endl << item->getText() << endl << endl;
+      time_t time = item->getTimeLastSurfaced();
+      cout << "Last seen on: " << put_time(localtime(&time), "%c %Z") << endl;
+      cout << "Surfaced " << item->getTimesReturned() << " times" << endl << endl;
+    }
   } else {
     cout << "Available subcommands: store <text>, recall" << endl;
     return -1;

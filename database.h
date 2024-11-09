@@ -9,7 +9,7 @@ class Database {
 
     void store(std::string& input);
 
-    std::string recall();
+    std::optional<StorageItem> recall();
 
   private:
     std::string filename_;

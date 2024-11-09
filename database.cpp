@@ -103,23 +103,27 @@ void Database::reserializeStorageItem(StorageItem storageItem, int index) {
   // We never change the text, so no updates necessary there.
 }
 
-string Database::recall() {
+optional<StorageItem> Database::recall() {
   if (itemsReturned_ == returnQuantity_) {
-    return "Only " + to_string(returnQuantity_) + " items will be returned today.";
+    cout << "Only " + to_string(returnQuantity_) + " items will be returned today." << endl;
+    return nullopt;
   }
   if (results_.size() == 0) {
-    return "Nothing here yet, try adding something?"; 
+    cout << "Nothing here yet, try adding something?" << endl;
+    return nullopt;
   }
 
   IndexItem resultIndex = Database::chooseResult();
 
   StorageItem resultItem = Database::deserializeFromIndex(resultIndex.getId());
+  StorageItem copyItem = resultItem;
+
   // Update resultItem so it doesn't resurface as easily next time.
   resultItem.setTimeLastSurfaced(time(nullptr));
   resultItem.setTimesReturned(resultItem.getTimesReturned() + 1);
   Database::reserializeStorageItem(resultItem, resultIndex.getId());
 
-  return resultItem.getText();
+  return copyItem;
 }
 
 IndexItem Database::chooseResult() {
