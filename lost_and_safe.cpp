@@ -9,9 +9,7 @@
 
 using namespace std;
 
-// Driver file while prototyping the backend
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
   string fileName = string(getenv("HOME")).append("/.lsdb.bin");
 
   // Parse command line arguments
@@ -24,7 +22,7 @@ int main(int argc, char* argv[])
 
   if (subcommand == "store") {
     if (argc != 3) {
-      cout << "Please try: lsdb store <text>, being sure to enclose the text in quotes" << endl;
+      cout << "Please try: lsdb store <text>, being sure to enclose the text in single quotes" << endl;
       return -1;
     }
     Database db = Database(fileName);

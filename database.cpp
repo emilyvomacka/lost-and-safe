@@ -18,7 +18,6 @@ Database::Database(string& filename) {
   srand(time(0));
   returnQuantity_ = std::rand() % 5 + 3;
   itemsReturned_ = 0;
-  cout << "LSDB initialized, return quantity is " << returnQuantity_ << endl;
 }
 
 struct compareScore {
