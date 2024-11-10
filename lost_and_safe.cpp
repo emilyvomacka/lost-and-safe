@@ -12,7 +12,7 @@ using namespace std;
 // Driver file while prototyping the backend
 int main(int argc, char* argv[])
 {
-  string fileName = "test_db.bin";
+  string fileName = string(getenv("HOME")).append("/.lsdb.bin");
 
   // Parse command line arguments
   if (argc < 2) {
