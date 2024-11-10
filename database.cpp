@@ -13,7 +13,6 @@ using namespace std;
 #define RANDOM_FACTOR 0.5f
 
 Database::Database(string& filename) {
-  // create new db
   filename_ = filename;
   results_ = initializeQueue();
   srand(time(0));
@@ -30,11 +29,8 @@ struct compareScore {
 
 vector<IndexItem> Database::initializeQueue() {
   ifstream f(filename_, ios::binary|ios::in);
-  if (f.fail()) { 
-    cerr << "Error details: " << strerror(errno) 
-        << endl;
-  }
   vector<IndexItem> results;
+  // Only initialize queue if a db file exists to query from.
   if (f.is_open()) {
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 gen(rd()); // seed the generator
@@ -74,7 +70,7 @@ void Database::store(string& input) {
 }
 
 void Database::serializeStorageItem(StorageItem storageItem) {
-  ofstream f(filename_, ios::binary | ios::app);
+  ofstream f(filename_, ios::binary|ios::app);
   if (!f.is_open()) {
       cerr << "Unable to open file: " << filename_ << endl;
       return;
@@ -96,7 +92,7 @@ void Database::reserializeStorageItem(StorageItem storageItem, int index) {
   }
   f.seekp(index, std::ios_base::beg);
   // We never change the version, skip past it.
-  f.seekg(sizeof(int), std::ios_base::cur);
+  f.seekp(sizeof(int), std::ios_base::cur);
   // Write the updated timesReturned and timeLastSurfaced vars.
   f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
   f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
