@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
       cout << endl << item->getText() << endl << endl;
       time_t time = item->getTimeLastSurfaced();
       cout << "Last seen on: " << put_time(localtime(&time), "%c %Z") << endl;
-      cout << "Surfaced " << item->getTimesReturned() << " times" << endl << endl;
+      cout << "Surfaced " << item->getTimesReturned() << " times previously" << endl << endl;
     }
   } else {
     cout << "Available subcommands: store <text>, recall" << endl;
