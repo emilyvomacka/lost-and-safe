@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     Database db = Database(fileName);
     string text = argv[2];
     db.store(text);
-    cout << "Successfully stored " << text << endl;
+    cout << "Successfully stored: " << text << endl;
   } else if (subcommand == "recall") {
     if (argc != 2) {
       cout << "Please try: lsdb recall" << endl;

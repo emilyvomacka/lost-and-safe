@@ -5,6 +5,7 @@ example-db.txt
 lost-and-safe_build/
 libsystem_platform.cpp
 test_db.bin
+tests
 .venv/
 .vscode/
 
