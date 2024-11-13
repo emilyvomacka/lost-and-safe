@@ -23,7 +23,7 @@ LSDB v1 is a simple CLI app:
 * `lsdb store '<text>'` serializes text input to local storage.
 
 ```
-~ lsdb store 'A recipe idea, or a phone number, or whatever else'
+$ lsdb store 'A recipe idea, or a phone number, or whatever else'
 Successfully stored: A recipe idea, or a phone number, or whatever else
 ```
 
@@ -33,7 +33,7 @@ Successfully stored: A recipe idea, or a phone number, or whatever else
 and items that have been returned less often.
 
 ```
-~ lsdb recall
+$ lsdb recall
 
 A recipe idea, or a phone number, or whatever else
 
