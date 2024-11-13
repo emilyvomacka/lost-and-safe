@@ -6,14 +6,14 @@ Sometimes I want to store things, but find that the "immediate access to everyth
 paradigm works against my interests. 
 
 Maybe I read a great paragraph and immediately want to see it again at some point, but don't
-want to encounter it on every subsequent opening of my notes app. Or maybe I have an idea that I'd like to see again
-after it simmers for some indefinite amount of time. Perhaps I want to remember a conversation or an experience, 
+want to encounter it on every subsequent opening of my notes app. Or maybe I have an idea that I'd like to revisit
+after it simmers a little. Or I want to remember a conversation or an experience, 
 but might prefer to wait awhile before re-encountering it.
 
 These situations call for storage with a little more stochastic whimsy.
-I made the Lost and Safe database (homage to [The Books](https://en.wikipedia.org/wiki/Lost_and_Safe)) to help.
+The Lost and Safe database (homage to [The Books](https://en.wikipedia.org/wiki/Lost_and_Safe)) was built to explore this idea.
 
-Things you store here are lost: the database will not permit fetching of any specific entry. They are also safe: whatever you store 
+Things you store here are lost: the database does not permit fetching of any specific entry. They are also safe: whatever you store 
 will come back to you eventually with enough calls to the database.
 
 ### Usage
@@ -41,10 +41,13 @@ Last seen on: Sun Nov 10 11:59:21 2024 EST
 Surfaced 0 times previously
 ```
 
-LSDB v2 (in progress!) will encrypt input to provide an extra measure of lost-ness, and rate-limit retrievals. It may eventually evolve to a web app.
+LSDB v2 (in progress!) will encrypt input to provide an extra measure of lostness, and rate-limit retrievals. It may eventually evolve to a web app.
 
 ### Building
 Create a build directory within the project. From the build directory, run `cmake --build .`
 
 ### Installing
 From your build directory, run `cmake --install .`
+
+### Many thanks to
+@ntietz for the design insights, @PaulBatchelor for the C++ support, and the terrific @recursecenter community.
