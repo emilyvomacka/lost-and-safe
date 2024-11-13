@@ -22,13 +22,12 @@ int main(int argc, char* argv[]) {
 
   if (subcommand == "store") {
     if (argc != 3) {
-      cout << "Please try: lsdb store <text>, being sure to enclose the text in single quotes" << endl;
+      cout << "Please try: lsdb store \"<text>\", being sure to enclose the text in quotes" << endl;
       return -1;
     }
     Database db = Database(fileName);
     string text = argv[2];
     db.store(text);
-    cout << "Successfully stored: " << text << endl;
   } else if (subcommand == "recall") {
     if (argc != 2) {
       cout << "Please try: lsdb recall" << endl;

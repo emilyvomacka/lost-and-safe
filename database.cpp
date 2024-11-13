@@ -81,6 +81,11 @@ void Database::serializeStorageItem(StorageItem storageItem) {
   unsigned long textLength = storageItem.getText().length();
   f.write(reinterpret_cast<char*>(&textLength), sizeof(unsigned long));
   f.write(storageItem.getText().c_str(), textLength);
+  if (!f.good()) {
+    cout << "Encountered an issue storing your text" << endl;
+  } else {
+    cout << "Successfully stored your text" << endl;
+  }
 }
 
 void Database::reserializeStorageItem(StorageItem storageItem, int index) {
@@ -96,6 +101,9 @@ void Database::reserializeStorageItem(StorageItem storageItem, int index) {
   f.write(reinterpret_cast<char*>(storageItem.getTimesReturnedPointer()), sizeof(int));
   f.write(reinterpret_cast<char*>(storageItem.getTimeLastSurfacedPointer()), sizeof(time_t));
   // We never change the text, so no updates necessary there.
+  if (!f.good()) {
+    cout << "Encountered an issue updating this text" << endl;
+  }
 }
 
 optional<StorageItem> Database::recall() {
