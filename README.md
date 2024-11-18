@@ -50,4 +50,4 @@ Create a build directory within the project. From the build directory, run `cmak
 From your build directory, run `cmake --install .`
 
 ### Many thanks to
-[@ntietz](https://github.com/ntietz) for the design insights, [@PaulBatchelor](https://github.com/PaulBatchelor) for the C++ support, and the terrific [@recursecenter](https://github.com/recursecenter) community.
+[Nicole Tietz-Sokolskaya](https://ntietz.com) for the design insights, [@PaulBatchelor](https://github.com/PaulBatchelor) for the C++ support, and the terrific [@recursecenter](https://github.com/recursecenter) community.
